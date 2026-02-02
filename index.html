@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>StaffHealth Workforce Stability Index (SHWSI)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #f4f6fb;
+      --bg-card: #ffffff;
+      --border-subtle: #e0e4f0;
+      --text-main: #111827;
+      --text-muted: #6b7280;
+      --accent: #1f4fbf;
+      --accent-soft: #e7edf9;
+      --accent-dark: #122650;
+      --danger: #b3261e;
+      --success: #15803d;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at top left, #e8efff 0, #f4f6fb 50%, #f9fafb 100%);
+      color: var(--text-main);
+    }
+
+    .app-shell {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: linear-gradient(90deg, var(--accent-dark), #13366e);
+      color: #ffffff;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      box-shadow: 0 2px 4px rgba(15, 23, 42, 0.3);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      background: radial-gradient(circle at 30% 20%, #f9fafb 0, #c7d2fe 40%, #1f4fbf 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 16px;
+    }
+
+    .brand-title {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .brand-sub {
+      font-size: 12px;
+      opacity: 0.8;
+    }
+
+    main {
+      flex: 1;
+      padding: 24px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .page {
+      width: 100%;
+      max-width: 1160px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border-radius: 14px;
+      padding: 16px 18px 18px;
+      border: 1px solid var(--border-subtle);
+      box-shadow: 0 2px 12px rgba(15, 23, 42, 0.06);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--accent-dark);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .card-badge {
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent-dark);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .card-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    @media (max-width: 800px) {
+      .kpi-row {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .kpi {
+      border-radius: 12px;
+      padding: 10px 12px;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+    }
+
+    .kpi-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .kpi-value {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--accent-dark);
+    }
+
+    .kpi-sub {
+      font-size: 11px;
+      color: #9ca3af;
+      margin-top: 2px;
+    }
+
+    .layout-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.8fr) minmax(0, 1.4fr);
+      gap: 16px;
+    }
+
+    @media (max-width: 960px) {
+      .layout-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .section-label {
+      margin-top: 10px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #6b7280;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px 16px;
+      margin-top: 8px;
+    }
+
+    @media (max-width: 800px) {
+      .form-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 12px;
+    }
+
+    .form-label {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .form-label span {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #9ca3af;
+      margin-left: 4px;
+    }
+
+    .input {
+      border-radius: 8px;
+      border: 1px solid #d1d5db;
+      padding: 6px 8px;
+      font-size: 13px;
+      outline: none;
+      background: #ffffff;
+    }
+
+    .input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px rgba(31, 79, 191, 0.1);
+    }
+
+    .input[type="number"]::-webkit-outer-spin-button,
+    .input[type="number"]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    .input[type="number"] {
+      -moz-appearance: textfield;
+    }
+
+    .help-text {
+      font-size: 10px;
+      color: #9ca3af;
+    }
+
+    .insight-card {
+      margin-top: 10px;
+      border-radius: 10px;
+      padding: 10px 11px;
+      background: linear-gradient(135deg, #e0edff, #eff6ff);
+      border: 1px solid #c7d2fe;
+      font-size: 12px;
+      color: #111827;
+      line-height: 1.5;
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+    }
+
+    .insight-icon {
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      background: #1d4ed8;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .insight-sub {
+      font-size: 11px;
+      color: #4b5563;
+      margin-top: 2px;
+    }
+
+    .btn-row {
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      border: none;
+      border-radius: 999px;
+      padding: 7px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      background: var(--accent);
+      color: #ffffff;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.3);
+    }
+
+    .btn-primary:hover {
+      background: #1d3f99;
+    }
+
+    .btn-ghost {
+      border-radius: 999px;
+      border: 1px solid #d1d5db;
+      padding: 6px 12px;
+      background: #ffffff;
+      font-size: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      color: #374151;
+    }
+
+    .btn-ghost:hover {
+      background: #f3f4f6;
+    }
+
+    footer {
+      padding: 10px 24px 16px;
+      font-size: 11px;
+      color: #9ca3af;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header>
+      <div class="brand">
+        <div class="brand-icon">WS</div>
+        <div>
+          <div class="brand-title">SHWSI</div>
+          <div class="brand-sub">StaffHealth · Workforce Stability Index</div>
+        </div>
+      </div>
+      <div class="brand-sub">
+        Community: Example Senior Living · Mode: Single Community
+      </div>
+    </header>
+
+    <main>
+      <div class="page">
+        <!-- TOP SUMMARY CARD WITH KPI ROW -->
+        <section class="card">
+          <div class="card-header">
+            <div class="card-title">
+              Workforce Stability Snapshot
+              <span class="card-badge">Prototype</span>
+            </div>
+            <div class="card-sub">
+              A single view of volatility, workforce drag, and hidden benefit burden.
+            </div>
+          </div>
+
+          <div class="kpi-row">
+            <div class="kpi">
+              <div class="kpi-label">Estimated Annual Volatility Cost</div>
+              <div class="kpi-value" id="volCost">$–</div>
+              <div class="kpi-sub">OT premium + call-off scramble (annualized)</div>
+            </div>
+            <div class="kpi">
+              <div class="kpi-label">Stabilizable Upside (StaffHealth + Verified)</div>
+              <div class="kpi-value" id="stabilizableUpside">$–</div>
+              <div class="kpi-sub">Conservative share of total exposure</div>
+            </div>
+            <div class="kpi">
+              <div class="kpi-label">Workforce Drag Cost (Pipeline Weakness)</div>
+              <div class="kpi-value" id="workforceDrag">$–</div>
+              <div class="kpi-sub">Leadership churn + frontline replacement cost</div>
+            </div>
+          </div>
+
+          <div class="kpi-row" style="margin-top:12px;">
+            <div class="kpi">
+              <div class="kpi-label">Hidden Benefits Burden</div>
+              <div class="kpi-value" id="benefitCost">$–</div>
+              <div class="kpi-sub">Benefits tied to unreliable core CNAs</div>
+            </div>
+            <div class="kpi">
+              <div class="kpi-label">Total Economic Exposure</div>
+              <div class="kpi-value" id="totalExposure">$–</div>
+              <div class="kpi-sub">Volatility + drag + benefits burden</div>
+            </div>
+            <div class="kpi">
+              <div class="kpi-label">SHWSI Score</div>
+              <div class="kpi-value" id="shwsiScore">–</div>
+              <div class="kpi-sub">0 = unstable · 100 = highly stable</div>
+            </div>
+          </div>
+
+          <div class="insight-card">
+            <div class="insight-icon">ⓘ</div>
+            <div>
+              <strong>How to use this:</strong>
+              <div class="insight-sub">
+                The goal is not penny-perfect accounting. SHWSI is designed to reveal the scale of
+                volatility, workforce drag, and hidden benefit spend so operators and StaffHealth can
+                align on the order-of-magnitude upside from a more stable elasticity layer.
+              </div>
+            </div>
+          </div>
+
+          <div class="btn-row">
+            <button class="btn-primary" onclick="recalculateAll()">
+              🔄 Recalculate SHWSI
+            </button>
+            <button class="btn-ghost">
+              📊 Export snapshot (concept)
+            </button>
+          </div>
+        </section>
+
+        <!-- MAIN GRID: LEFT INPUTS / RIGHT EXPLANATION -->
+        <section class="layout-grid">
+          <!-- LEFT: INPUTS -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Volatility, Drag & Benefits Inputs</div>
+            </div>
+            <div class="card-sub">
+              Enter directional values. These are meant to illustrate exposure and stabilizable upside,
+              not to match an exact P&amp;L.
+            </div>
+
+            <div class="section-label">Staffing Volatility (Monthly)</div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">Overtime hours per month <span>VOL-1</span></label>
+                <input id="otHours" class="input" type="number" value="180" />
+                <div class="help-text">Total OT hours across CNAs/LPNs/RNs.</div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Average OT premium per hour ($) <span>VOL-2</span></label>
+                <input id="otPremium" class="input" type="number" value="12" />
+                <div class="help-text">Difference between regular rate and OT rate.</div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Call-offs per month <span>VOL-3</span></label>
+                <input id="callOffs" class="input" type="number" value="22" />
+                <div class="help-text">All last-minute call-outs across roles.</div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Average cost per call-off ($) <span>VOL-4</span></label>
+                <input id="callOffCost" class="input" type="number" value="250" />
+                <div class="help-text">Leadership scramble, coverage, disruption.</div>
+              </div>
+            </div>
+
+            <div class="section-label">Workforce Drag (Annual)</div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">ED/Admin turnover per year <span>DRAG-1</span></label>
+                <input id="edTurnover" class="input" type="number" value="0.5" />
+                <div class="help-text">0.5 = one ED every two years; 1 = one per year.</div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Cost per ED/Admin change ($) <span>DRAG-2</span></label>
+                <input id="edTurnoverCost" class="input" type="number" value="75000" />
+                <div class="help-text">Recruiting, onboarding, lost momentum, interim support.</div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Frontline (CNA/LPN/RN) annual turnover (%) <span>DRAG-3</span></label>
+                <input id="clinicalTurnoverPct" class="input" type="number" value="55" />
+                <div class="help-text">Approximate % of frontline roles replaced annually.</div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Cost per frontline replacement ($) <span>DRAG-4</span></label>
+                <input id="replacementCost" class="input" type="number" value="5500" />
+                <div class="help-text">Recruiting, training, ramp-up, early instability.</div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Assumed frontline headcount <span>DRAG-5</span></label>
+                <input id="frontlineCount" class="input" type="number" value="40" />
+                <div class="help-text">Directional estimate; can be adjusted per building.</div>
+              </div>
+            </div>
+
+            <div class="section-label">Internal Benefits Burden (Hidden Cost)</div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">Core CNA headcount <span>BEN-1</span></label>
+                <input id="benefitCnaCount" class="input" type="number" value="25" />
+                <div class="help-text">Full-time or benefits-eligible CNAs.</div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Annual benefits cost per CNA ($) <span>BEN-2</span></label>
+                <input id="benefitPerCna" class="input" type="number" value="7000" />
+                <div class="help-text">Health, PTO, 401(k), training, uniforms, etc.</div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">% CNAs considered “high-risk / unreliable” <span>BEN-3</span></label>
+                <input id="benefitRiskPct" class="input" type="number" value="20" />
+                <div class="help-text">Those you’d describe as “bad apples” or chronic instability.</div>
+              </div>
+            </div>
+
+            <div class="insight-card">
+              <div class="insight-icon">💡</div>
+              <div>
+                <strong>Why benefits belong in the model:</strong>
+                <div class="insight-sub">
+                  Internal staff carry a real benefits burden that rarely shows up in simple hourly comparisons.
+                  When a portion of that spend is tied to unreliable or high-risk staff, it becomes hidden drag.
+                  SHWSI treats that as stabilizable upside if instability is replaced with a more reliable elasticity
+                  layer tied to StaffHealth + Verified.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- RIGHT: EXPLANATION / ECONOMIC DRIVERS -->
+          <aside class="card">
+            <div class="card-header">
+              <div class="card-title">Economic Drivers & Interpretation</div>
+            </div>
+            <div class="card-sub">
+              These figures are directional. They are intended to support a strategy conversation, not replace
+              your finance team’s work.
+            </div>
+
+            <div class="section-label">Modeled Exposure (How the numbers behave)</div>
+            <div class="insight-card">
+              <div class="insight-icon">📊</div>
+              <div>
+                <strong>Volatility Cost</strong>
+                <div class="insight-sub">
+                  Based on monthly OT premium and call-off scramble cost, annualized to show the scale of
+                  reactive coverage. This is the “fire drill” bucket.
+                </div>
+              </div>
+            </div>
+
+            <div class="insight-card">
+              <div class="insight-icon">🏃</div>
+              <div>
+                <strong>Workforce Drag Cost</strong>
+                <div class="insight-sub">
+                  Combines ED/Admin churn and frontline turnover into an annual drag estimate. This captures
+                  leadership distraction, pipeline weakness, and instability that doesn’t always appear as a
+                  single line on a P&amp;L.
+                </div>
+              </div>
+            </div>
+
+            <div class="insight-card">
+              <div class="insight-icon">🎯</div>
+              <div>
+                <strong>Hidden Benefits Burden</strong>
+                <div class="insight-sub">
+                  Estimates the share of total benefits spend flowing to unreliable or high-risk core CNAs.
+                  This is a structurally conservative way to quantify the upside of shifting some coverage to
+                  a more stable PRN elasticity layer.
+                </div>
+              </div>
+            </div>
+
+            <div class="insight-card">
+              <div class="insight-icon">💰</div>
+              <div>
+                <strong>Stabilizable Upside & Value Share</strong>
+                <div class="insight-sub">
+                  SHWSI uses a conservative fraction of total exposure to define “stabilizable upside.”
+                  A portion of that can be shared with a partner like StaffHealth + Verified through
+                  stability-linked pricing, aligning incentives around risk reduction rather than rate wars.
+                </div>
+              </div>
+            </div>
+          </aside>
+        </section>
+      </div>
+    </main>
+
+    <footer>
+      SHWSI is a prototype tool for illustrating the economics of workforce stability. All figures are directional and for discussion only.
+    </footer>
+  </div>
+
+  <script>
+    function formatCurrency(num) {
+      if (isNaN(num)) num = 0;
+      return "$" + num.toLocaleString(undefined, { maximumFractionDigits: 0 });
+    }
+
+    function calculateVolatilityCost() {
+      const otHours = parseFloat(document.getElementById("otHours").value) || 0;
+      const otPremium = parseFloat(document.getElementById("otPremium").value) || 0;
+      const callOffs = parseFloat(document.getElementById("callOffs").value) || 0;
+      const callOffCost = parseFloat(document.getElementById("callOffCost").value) || 0;
+
+      const monthlyOTCost = otHours * otPremium;
+      const monthlyCallOffCost = callOffs * callOffCost;
+      const annualVolCost = (monthlyOTCost + monthlyCallOffCost) * 12;
+
+      document.getElementById("volCost").textContent = formatCurrency(annualVolCost);
+      return annualVolCost;
+    }
+
+    function calculateWorkforceDrag() {
+      const edTurnover = parseFloat(document.getElementById("edTurnover").value) || 0;
+      const edTurnoverCost = parseFloat(document.getElementById("edTurnoverCost").value) || 0;
+      const clinicalTurnoverPct = parseFloat(document.getElementById("clinicalTurnoverPct").value) || 0;
+      const replacementCost = parseFloat(document.getElementById("replacementCost").value) || 0;
+      const frontlineCount = parseFloat(document.getElementById("frontlineCount").value) || 0;
+
+      const edDrag = edTurnover * edTurnoverCost;
+      const frontlineChurn = (clinicalTurnoverPct / 100) * frontlineCount;
+      const frontlineDrag = frontlineChurn * replacementCost;
+
+      const totalDrag = edDrag + frontlineDrag;
+      document.getElementById("workforceDrag").textContent = formatCurrency(totalDrag);
+      return totalDrag;
+    }
+
+    function calculateBenefitCost() {
+      const cnaCount = parseFloat(document.getElementById("benefitCnaCount").value) || 0;
+      const perCna = parseFloat(document.getElementById("benefitPerCna").value) || 0;
+      const riskPct = parseFloat(document.getElementById("benefitRiskPct").value) || 0;
+
+      const benefitCost = cnaCount * perCna * (riskPct / 100);
+      document.getElementById("benefitCost").textContent = formatCurrency(benefitCost);
+      return benefitCost;
+    }
+
+    function recalculateAll() {
+      const vol = calculateVolatilityCost();
+      const drag = calculateWorkforceDrag();
+      const benefits = calculateBenefitCost();
+
+      const totalExposure = vol + drag + benefits;
+      document.getElementById("totalExposure").textContent = formatCurrency(totalExposure);
+
+      const stabilizable = totalExposure * 0.35; // mid between 30–40% capture
+      document.getElementById("stabilizableUpside").textContent = formatCurrency(stabilizable);
+
+      // Rough scoring: cap penalty at 60 points on 100 scale
+      const scaledPenalty = Math.min(totalExposure / 100000, 60);
+      const score = Math.max(100 - scaledPenalty, 20);
+      document.getElementById("shwsiScore").textContent = Math.round(score);
+    }
+
+    window.addEventListener("DOMContentLoaded", recalculateAll);
+  </script>
+</body>
+</html>
